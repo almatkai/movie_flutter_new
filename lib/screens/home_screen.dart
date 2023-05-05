@@ -16,9 +16,19 @@ import 'package:movie_flutter_new/widgets/movie_card_container.dart';
 import 'package:movie_flutter_new/widgets/shadowless_floating_button.dart';
 import 'package:sizer/sizer.dart';
 import 'package:movie_flutter_new/services/movie.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movie_flutter_new/auth.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
+  final User? user = Auth().currenUser;
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
   @override
   HomeScreenState createState() => HomeScreenState();
 }

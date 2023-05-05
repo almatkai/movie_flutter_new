@@ -4,10 +4,20 @@ import 'package:movie_flutter_new/widgets/drawer_item.dart';
 import 'package:sizer/sizer.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:movie_flutter_new/auth.dart';
 
 class DrawerScreen extends StatelessWidget {
   final Function(Color) colorChanged;
   DrawerScreen({required this.colorChanged});
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
+  Widget _signOutButton() {
+    return ElevatedButton(onPressed: signOut, child: const Text("Sign Out"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +79,7 @@ class DrawerScreen extends StatelessWidget {
               DrawerItem(
                   title: kDrawerTitleThirdText,
                   desc: kDrawerDependenciesDescText),
+              _signOutButton(),
             ],
           ),
         ),
