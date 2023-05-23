@@ -124,12 +124,6 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   buttonSecondOnPressed: (index) =>
                       movieCategorySwitcher(index),
                   buttonThirdOnPressed: (index) => movieCategorySwitcher(index),
-                  searchOnPressed: () => navi.newScreen(
-                    context: context,
-                    newScreen: () => FinderScreen(
-                      themeColor: themeColor!,
-                    ),
-                  ),
                 ),
                 preferredSize:
                     Size.fromHeight((bottomBarIndex == 1) ? 16.0.h : 7.h),

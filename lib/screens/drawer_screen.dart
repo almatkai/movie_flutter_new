@@ -79,7 +79,14 @@ class DrawerScreen extends StatelessWidget {
               DrawerItem(
                   title: kDrawerTitleThirdText,
                   desc: kDrawerDependenciesDescText),
-              _signOutButton(),
+              SizedBox(
+                height: 5.h,
+              ),
+              DrawerItem(
+                  title: "Sign Out",
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [_signOutButton()])),
             ],
           ),
         ),

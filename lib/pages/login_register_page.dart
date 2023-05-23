@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             _entryField('password', _controllerPassword),
             _errorMessage(),
             _submitButton(),
-            _loginOrRegisterButton()
+            _loginOrRegisterButton(),
           ],
         ),
       ),

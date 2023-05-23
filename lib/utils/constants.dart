@@ -26,7 +26,7 @@ const kDrawerTitleThirdText = "DEPENDENCIES";
 const kAppliedTheme = "Theme applied";
 const kNotFoundErrorText = "Not found";
 const kDrawerAboutDescText =
-    "Hi, This is a group project (Almat, Erdaulet). You see currently my portfoliowork, which is based on the themoviedb API. If you want to see my future developments, follow us on GitHub (almatkai).";
+    "Hi, This is a group project (Almat, Yerdaulet). You see currently my portfoliowork, which is based on the themoviedb API. If you want to see my future developments, follow us on GitHub (almatkai).";
 const kDrawerDependenciesDescText =
     "\t• sizer\n\t• flutter_spinkit\n\t• cached_network_image\n\t• fluttertoast\n\t• http\n\t• path_provider";
 const kMainGreenColor = Color(0xFF37A45E);
@@ -76,7 +76,7 @@ final kTitleTextStyle = TextStyle(
 );
 
 final kDrawerDescTextStyle = TextStyle(
-  fontSize: 14.sp,
+  fontSize: 12.sp,
   color: kDrawerTextColor,
   height: 0.19.h,
 );

@@ -6,7 +6,6 @@ import 'package:movie_flutter_new/utils/constants.dart';
 class CustomMainAppBarContent extends StatefulWidget {
   final String title;
   final Color? activeColor;
-  final Function? searchOnPressed;
   final Function(int)? buttonFistOnPressed;
   final Function(int)? buttonSecondOnPressed;
   final Function(int)? buttonThirdOnPressed;
@@ -21,7 +20,6 @@ class CustomMainAppBarContent extends StatefulWidget {
     required this.title,
     this.activeButtonIndex,
     this.activeColor,
-    required this.searchOnPressed,
     this.buttonFistOnPressed,
     this.buttonSecondOnPressed,
     this.buttonThirdOnPressed,
@@ -60,14 +58,6 @@ class _CustomMainAppBarContentState extends State<CustomMainAppBarContent> {
       children: [
         ListTile(
           title: Text(widget.title, style: kAppBarTitleTextStyle),
-          trailing: (widget.showSlider)
-              ? IconButton(
-                  onPressed: () {
-                    widget.searchOnPressed!();
-                  },
-                  icon: Icon(Icons.search, size: 22.sp),
-                )
-              : null,
         ),
         SizedBox(height: 3.h),
         if (widget.showSlider)
