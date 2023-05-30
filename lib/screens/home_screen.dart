@@ -1,9 +1,15 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:movie_flutter_new/auth.dart';
 import 'package:movie_flutter_new/screens/drawer_screen.dart';
-import 'package:movie_flutter_new/screens/finder_screen.dart';
+import 'package:movie_flutter_new/services/movie.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
-import 'package:movie_flutter_new/utils/navi.dart' as navi;
 import 'package:movie_flutter_new/utils/scroll_top_with_controller.dart'
     as scrollTop;
 import 'package:movie_flutter_new/utils/toast_alert.dart' as alert;
@@ -15,10 +21,6 @@ import 'package:movie_flutter_new/widgets/movie_card.dart';
 import 'package:movie_flutter_new/widgets/movie_card_container.dart';
 import 'package:movie_flutter_new/widgets/shadowless_floating_button.dart';
 import 'package:sizer/sizer.dart';
-import 'package:movie_flutter_new/services/movie.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:movie_flutter_new/auth.dart';
-import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -45,6 +47,9 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool showSlider = true;
   String title = kHomeScreenTitleText;
   int bottomBarIndex = 1;
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  bool isAlertSet = false;
 
   Future<void> loadData() async {
     MovieModel movieModel = MovieModel();
@@ -80,6 +85,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getConnectivity();
     super.initState();
     () async {
       themeColor = await file.currentTheme();
@@ -97,8 +103,20 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     }();
   }
 
+  getConnectivity() =>
+      subscription = Connectivity().onConnectivityChanged.listen(
+        (ConnectivityResult result) async {
+          isDeviceConnected = await InternetConnectionChecker().hasConnection;
+          if (!isDeviceConnected && isAlertSet == false) {
+            showDialogBox();
+            setState(() => isAlertSet = true);
+          }
+        },
+      );
+
   @override
   void dispose() {
+    subscription.cancel();
     if (_scrollController != null) _scrollController!.dispose();
     super.dispose();
   }
@@ -183,4 +201,27 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 : null,
           );
   }
+
+  showDialogBox() => showCupertinoDialog<String>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+            title: const Text("No Connection"),
+            content: const Text("Please check your internet connection"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context, "Cancel");
+                    setState(() => isAlertSet = false);
+                    isDeviceConnected =
+                        await InternetConnectionChecker().hasConnection;
+                    if (!isDeviceConnected) {
+                      showDialogBox();
+                      setState(() {
+                        isAlertSet = true;
+                      });
+                    }
+                  },
+                  child: const Text("OK"))
+            ],
+          ));
 }

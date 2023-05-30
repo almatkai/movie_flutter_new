@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import '../auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,9 +14,24 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
-
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+
+  Future<void> googleSignIn() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    }
+  }
 
   Future<void> signInWithEmailAndPassword() async {
     try {
@@ -61,6 +78,11 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(isLogin ? "Login" : "Register"));
   }
 
+  Widget _googleSignInButton() {
+    return ElevatedButton(
+        onPressed: googleSignIn, child: const Text("Sign in with Google"));
+  }
+
   Widget _loginOrRegisterButton() {
     return TextButton(
         onPressed: () {
@@ -88,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
             _errorMessage(),
             _submitButton(),
             _loginOrRegisterButton(),
+            //_googleSignInButton()
           ],
         ),
       ),

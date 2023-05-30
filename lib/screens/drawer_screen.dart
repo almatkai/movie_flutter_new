@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movie_flutter_new/auth.dart';
+import 'package:movie_flutter_new/utils/constants.dart';
+import 'package:movie_flutter_new/utils/file_manager.dart' as file;
 import 'package:movie_flutter_new/widgets/colored_circle.dart';
 import 'package:movie_flutter_new/widgets/drawer_item.dart';
 import 'package:sizer/sizer.dart';
-import 'package:movie_flutter_new/utils/constants.dart';
-import 'package:movie_flutter_new/utils/file_manager.dart' as file;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:movie_flutter_new/auth.dart';
 
 class DrawerScreen extends StatelessWidget {
   final Function(Color) colorChanged;
@@ -80,7 +79,7 @@ class DrawerScreen extends StatelessWidget {
                   title: kDrawerTitleThirdText,
                   desc: kDrawerDependenciesDescText),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
               ),
               DrawerItem(
                   title: "Sign Out",
