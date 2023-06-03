@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">movie_flutter_new</string>
+    <string name="facebook_app_id">601316268444242</string>
+    <string name="facebook_client_token">efc7b078b75b2f715b96d8484d74172e</string>
+</resources>

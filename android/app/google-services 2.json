@@ -15,20 +15,12 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDneqx7Xwl41TRm9hMqoBwueFol7QC5pWM"
+          "current_key": "AIzaSyBmVxZrFtg0MyBErZEg-Yw6361-79jxSds"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1015022644056-5v146eg9u7vjcf9tat78m5fn9743s9ti.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.movieFlutterNew"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_new/auth.dart';
+import 'package:movie_flutter_new/screens/profile_screen.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
 import 'package:movie_flutter_new/widgets/colored_circle.dart';
@@ -85,7 +86,24 @@ class DrawerScreen extends StatelessWidget {
                   title: "Sign Out",
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [_signOutButton()])),
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileScreen(
+                                          themeColor: kMainBlueColor,
+                                        )));
+                          },
+                          child: Text(
+                            "Profile Page",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        _signOutButton()
+                      ])),
             ],
           ),
         ),

@@ -45,6 +45,8 @@ dependencies:
   google_sign_in: ^6.1.2
   connectivity_plus: ^4.0.1
   internet_connection_checker: ^1.0.0+1
+  github_sign_in: ^0.0.5-dev.4
+  cloud_firestore: ^4.8.0
 
 dev_dependencies:
   flutter_test:
