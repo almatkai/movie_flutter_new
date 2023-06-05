@@ -42,6 +42,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ScrollController? _scrollController;
   bool showBackToTopButton = false;
   Color? themeColor;
+  String? language;
   int? activeInnerPageIndex;
   List<MovieCard>? _movieCards;
   bool showSlider = true;
@@ -56,9 +57,12 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     _movieCards = (bottomBarIndex == 1)
         ? await movieModel.getMovies(
             moviesType: MoviePageType.values[activeInnerPageIndex!],
-            themeColor: themeColor!)
+            themeColor: themeColor!,
+            language: language!)
         : await movieModel.getFavorites(
-            themeColor: themeColor!, bottomBarIndex: bottomBarIndex);
+            themeColor: themeColor!,
+            bottomBarIndex: bottomBarIndex,
+            language: language!);
     setState(() {
       scrollTop.scrollToTop(_scrollController!);
       showBackToTopButton = false;
@@ -66,21 +70,43 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void pageSwitcher(int index) {
-    setState(() {
-      bottomBarIndex = (index == 2) ? 2 : 1;
-      title = (index == 2) ? kFavoriteScreenTitleText : kHomeScreenTitleText;
-      showSlider = !(index == 2);
-      _movieCards = null;
-      loadData();
-    });
+    () async {
+      themeColor = await file.currentTheme();
+      language = await file.currentLanguage();
+      _scrollController = ScrollController()
+        ..addListener(() {
+          setState(() {
+            showBackToTopButton = (_scrollController!.offset >= 200);
+          });
+        });
+      activeInnerPageIndex = 0;
+      setState(() {
+        bottomBarIndex = (index == 2) ? 2 : 1;
+        title = (index == 2) ? kFavoriteScreenTitleText : kHomeScreenTitleText;
+        showSlider = !(index == 2);
+        _movieCards = null;
+        loadData();
+      });
+    }();
   }
 
   void movieCategorySwitcher(int index) {
-    setState(() {
-      activeInnerPageIndex = index;
-      _movieCards = null;
-      loadData();
-    });
+    () async {
+      themeColor = await file.currentTheme();
+      language = await file.currentLanguage();
+      _scrollController = ScrollController()
+        ..addListener(() {
+          setState(() {
+            showBackToTopButton = (_scrollController!.offset >= 200);
+          });
+        });
+      activeInnerPageIndex = 0;
+      setState(() {
+        activeInnerPageIndex = index;
+        _movieCards = null;
+        loadData();
+      });
+    }();
   }
 
   @override
@@ -89,7 +115,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
     () async {
       themeColor = await file.currentTheme();
-      print(themeColor);
+      language = await file.currentLanguage();
       _scrollController = ScrollController()
         ..addListener(() {
           setState(() {
@@ -123,7 +149,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return (themeColor == null)
+    return (themeColor == null || language == null)
         ? CustomLoadingSpinKitRing(loadingColor: themeColor)
         : Scaffold(
             key: _scaffoldKey,
@@ -155,6 +181,7 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         scrollController: _scrollController!,
                         themeColor: themeColor!,
                         movieCards: _movieCards!,
+                        language: language!,
                       ),
             bottomNavigationBar: BottomNavigation(
               activeColor: themeColor!,
@@ -181,13 +208,21 @@ class HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ],
             ),
             drawerEnableOpenDragGesture: false,
-            drawer: DrawerScreen(colorChanged: (color) {
-              themeColor = color;
-              setState(() {
-                alert.toastAlert(
-                    message: kAppliedTheme, themeColor: themeColor);
-              });
-            }),
+            drawer: DrawerScreen(
+              colorChanged: (color) {
+                themeColor = color;
+                setState(() {
+                  alert.toastAlert(
+                      message: kAppliedTheme, themeColor: themeColor);
+                });
+              },
+              languageChanged: (language) {
+                language = language;
+                setState(() {
+                  alert.toastAlert(message: "${language} language applied");
+                });
+              },
+            ),
             floatingActionButton: showBackToTopButton
                 ? ShadowlessFloatingButton(
                     iconData: Icons.keyboard_arrow_up_outlined,

@@ -1,11 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:movie_flutter_new/screens/home_screen.dart';
 
-import '../auth.dart';
-
-//divmad-gutnoh-4cyfzI
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -16,7 +15,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String? errorMessage = '';
   bool isLogin = true;
-  bool isAdmin = true;
+  var options = [
+    'User',
+    'Admin',
+  ];
+  var _currentItemSelected = "User";
+  var role = "User";
+  final _formkey = GlobalKey<FormState>();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
@@ -73,8 +78,39 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signInWithEmailAndPassword() async {
     try {
-      await Auth().signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
+      User? user = FirebaseAuth.instance.currentUser;
+      var kk = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          if (documentSnapshot.get('rool') == "Admin") {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ),
+            );
+          }
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+        }
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -84,8 +120,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
-          email: _controllerEmail.text, password: _controllerPassword.text);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _controllerEmail.text, password: _controllerPassword.text)
+          .then(
+              (value) => {postDetailsToFirestore(_controllerEmail.text, role)})
+          .catchError((e) {});
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -117,19 +157,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _googleSignInButton() {
-    return ElevatedButton(
-        onPressed: googleSignIn, child: const Text("Sign in with Google"));
+    return ElevatedButton(onPressed: googleSignIn, child: const Text("Google"));
   }
 
   Widget _githubSignInButton() {
     return ElevatedButton(
-        onPressed: signInWithGitHub, child: const Text("Sign in with Github"));
+        onPressed: signInWithGitHub, child: const Text("Github"));
   }
 
   Widget _anonSignInButton() {
     return ElevatedButton(
-        onPressed: signInWithGuestMode,
-        child: const Text("Sign in as a guest"));
+        onPressed: signInWithGuestMode, child: const Text("Guest Mode"));
   }
 
   Widget _loginOrRegisterButton() {
@@ -140,16 +178,6 @@ class _LoginPageState extends State<LoginPage> {
           });
         },
         child: Text(isLogin ? "Register instead" : "Login instead"));
-  }
-
-  Widget _signInAsAdmin() {
-    return TextButton(
-        onPressed: () {
-          setState(() {
-            isAdmin = !isAdmin;
-          });
-        },
-        child: Text(isAdmin ? "Sign in as user" : "Sign in as admin"));
   }
 
   @override
@@ -168,18 +196,51 @@ class _LoginPageState extends State<LoginPage> {
             _entryField('password', _controllerPassword),
             _errorMessage(),
             _submitButton(),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              _loginOrRegisterButton(),
-              _signInAsAdmin(),
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            _loginOrRegisterButton(),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               _googleSignInButton(),
               _githubSignInButton(),
+              _anonSignInButton()
             ]),
-            _anonSignInButton()
+            DropdownButton<String>(
+              dropdownColor: Colors.blue[900],
+              isDense: true,
+              isExpanded: false,
+              iconEnabledColor: Colors.white,
+              focusColor: Colors.white,
+              items: options.map((String dropDownStringItem) {
+                return DropdownMenuItem<String>(
+                  value: dropDownStringItem,
+                  child: Text(
+                    dropDownStringItem,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (newValueSelected) {
+                setState(() {
+                  _currentItemSelected = newValueSelected!;
+                  role = newValueSelected;
+                });
+              },
+              value: _currentItemSelected,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  postDetailsToFirestore(String email, String rool) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var user = FirebaseAuth.instance.currentUser;
+    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    ref.doc(user!.uid).set({'email': _controllerEmail.text, 'rool': rool});
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 }

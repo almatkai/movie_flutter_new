@@ -2,33 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:movie_flutter_new/screens/home_screen.dart';
 import 'package:sizer/sizer.dart';
 
+import '../utils/file_manager.dart' as file;
+
 final GlobalKey<HomeScreenState> kHomeScreenKey = GlobalKey();
+var language = file.currentLanguage();
 
 const kThemoviedbURL = "https://api.themoviedb.org/3/movie";
 const kThemovieDiscoverdbURL = "https://api.themoviedb.org/3/discover/movie";
 const kThemoviedbSearchURL = "https://api.themoviedb.org/3/search/movie";
 const kThemoviedbImageURL = "https://image.tmdb.org/t/p/w300";
-const kHomeScreenButtonFirstText = "Populars";
-const kHomeScreenButtonSecondText = "Coming Soon";
-const kHomeScreenButtonThirdText = "Top Rated";
-const kHomeScreenTitleText = "Watch Now";
-const k404Text = "Movies not found";
-const kFavoriteRemovedText = "Movie removed from Favorites";
-const kFavoriteAddedText = "Movie added to Favorites";
-const kDetailsScreenTitleText = "Overview";
-const kStoryLineTitleText = "Storyline";
-const kSplashScreenTitleText = "loading..";
-const kFinderScreenTitleText = "Finder";
-const kFavoriteScreenTitleText = "Favorites";
-const kDrawerTitleFirstText = "THEME";
-const kDrawerTitleSecondText = "ABOUT";
-const kDrawerTitleThirdText = "DEPENDENCIES";
-const kAppliedTheme = "Theme applied";
-const kNotFoundErrorText = "Not found";
-const kDrawerAboutDescText =
+
+var kHomeScreenButtonFirstText = "Populars";
+var kHomeScreenButtonSecondText = "Coming Soon";
+var kHomeScreenButtonThirdText = "Top Rated";
+var kHomeScreenTitleText = "Watch Now";
+var k404Text = "Movies not found";
+var kFavoriteRemovedText = "Movie removed from Favorites";
+var kFavoriteAddedText = "Movie added to Favorites";
+var kDetailsScreenTitleText = "Overview";
+var kStoryLineTitleText = "Storyline";
+var kSplashScreenTitleText = "loading..";
+var kFinderScreenTitleText = "Finder";
+var kFavoriteScreenTitleText = "Favorites";
+var kDrawerTitleFirstText = "THEME";
+var kDrawerTitleSecondText = "ABOUT";
+var kDrawerTitleThirdText = "DEPENDENCIES";
+var kAppliedTheme = "Theme applied";
+var kNotFoundErrorText = "Not found";
+var kDrawerAboutDescText =
     "Hi, This is a group project (Almat, Yerdaulet). You see currently my portfoliowork, which is based on the themoviedb API. If you want to see my future developments, follow us on GitHub (almatkai).";
-const kDrawerDependenciesDescText =
-    "\t• sizer\n\t• flutter_spinkit\n\t• cached_network_image\n\t• fluttertoast\n\t• http";
+
 const kMainGreenColor = Color(0xFF37A45E);
 const kMainOrangeColor = Color(0xFFE58901);
 const kMainBlueColor = Color(0xFF2C78C5);

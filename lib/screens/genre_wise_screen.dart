@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_flutter_new/services/movie.dart';
+import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
 import 'package:movie_flutter_new/utils/scroll_top_with_controller.dart'
     as scrollTop;
-import 'package:movie_flutter_new/services/movie.dart';
-import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/widgets/custom_loading_spin_kit_ring.dart';
 import 'package:movie_flutter_new/widgets/movie_card.dart';
 import 'package:movie_flutter_new/widgets/movie_card_container.dart';
@@ -24,13 +23,15 @@ class GenreWiseScreen extends StatefulWidget {
 class _GenreWiseScreenState extends State<GenreWiseScreen>
     with TickerProviderStateMixin {
   Color? themeColor;
+  String? language;
   List<MovieCard>? _movieCards;
   bool showBackToTopButton = false;
   ScrollController? _scrollController;
   Future<void> loadData() async {
     MovieModel movieModel = MovieModel();
+    language = await file.currentLanguage();
     _movieCards = await movieModel.getGenreWiseMovies(
-        genreId: widget.genreId, themeColor: themeColor!);
+        genreId: widget.genreId, themeColor: themeColor!, language: language!);
 
     setState(() {
       scrollTop.scrollToTop(_scrollController!);
@@ -82,6 +83,7 @@ class _GenreWiseScreenState extends State<GenreWiseScreen>
                   scrollController: _scrollController!,
                   themeColor: themeColor!,
                   movieCards: _movieCards!,
+                  language: language!,
                 ),
       floatingActionButton: showBackToTopButton
           ? ShadowlessFloatingButton(

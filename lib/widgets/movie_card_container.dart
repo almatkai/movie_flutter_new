@@ -6,12 +6,13 @@ class MovieCardContainer extends StatelessWidget {
   final Color themeColor;
   final ScrollController scrollController;
   final List<MovieCard> movieCards;
+  final String language;
 
-  MovieCardContainer({
-    required this.themeColor,
-    required this.scrollController,
-    required this.movieCards,
-  });
+  MovieCardContainer(
+      {required this.themeColor,
+      required this.scrollController,
+      required this.movieCards,
+      required this.language});
 
   @override
   Widget build(BuildContext context) {

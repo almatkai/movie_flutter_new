@@ -5,11 +5,13 @@ import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
 import 'package:movie_flutter_new/widgets/colored_circle.dart';
 import 'package:movie_flutter_new/widgets/drawer_item.dart';
+import 'package:movie_flutter_new/widgets/language_circle.dart';
 import 'package:sizer/sizer.dart';
 
 class DrawerScreen extends StatelessWidget {
   final Function(Color) colorChanged;
-  DrawerScreen({required this.colorChanged});
+  final Function(String) languageChanged;
+  DrawerScreen({required this.colorChanged, required this.languageChanged});
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -70,15 +72,41 @@ class DrawerScreen extends StatelessWidget {
                 height: 5.h,
               ),
               DrawerItem(
-                title: kDrawerTitleSecondText,
-                desc: kDrawerAboutDescText,
+                title: "Language",
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    LanguageCircle(
+                      onPressed: (language) {
+                        file.saveLanguage(language: "ENG");
+                        languageChanged(language);
+                      },
+                      language: "ENG",
+                    ),
+                    LanguageCircle(
+                      onPressed: (language) {
+                        file.saveLanguage(language: "RUS");
+                        languageChanged(language);
+                      },
+                      language: "RUS",
+                    ),
+                    LanguageCircle(
+                      onPressed: (language) {
+                        file.saveLanguage(language: "ESP");
+                        languageChanged(language);
+                      },
+                      language: "ESP",
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 5.h,
               ),
               DrawerItem(
-                  title: kDrawerTitleThirdText,
-                  desc: kDrawerDependenciesDescText),
+                title: kDrawerTitleSecondText,
+                desc: kDrawerAboutDescText,
+              ),
               SizedBox(
                 height: 2.h,
               ),

@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
+import 'package:path_provider/path_provider.dart';
 
 Future<bool> _write({required String text, required String root}) async {
   final Directory directory = await getApplicationDocumentsDirectory();
   final File file = File('${directory.path}/$root');
   try {
     await file.writeAsString(text);
+    print(text);
     return true;
   } catch (e, s) {
     print(e);
@@ -31,6 +33,10 @@ Future<String> _read({required String root}) async {
 
 Future<bool> saveTheme({required String color}) async {
   return await _write(text: color, root: "color.txt");
+}
+
+Future<bool> saveLanguage({required String language}) async {
+  return await _write(text: language, root: "language.txt");
 }
 
 Future<bool> addFavorite({required String movieID}) async {
@@ -74,6 +80,28 @@ Future<Color> currentTheme() async {
   }
 
   return Future.value(color);
+}
+
+Future<String> currentLanguage() async {
+  String language;
+  String text = await _read(root: "language.txt");
+  switch (text) {
+    case "ENG":
+      language = "&language=en-US";
+      break;
+    case "RUS":
+      language = "&language=ru-RU";
+      break;
+    case "ESP":
+      language = "&language=es-SS";
+      break;
+    default:
+      // ignore: avoid_print
+      print(text);
+      language = "&language=ru-RU";
+  }
+
+  return Future.value(language);
 }
 
 Future<bool> isMovieInFavorites({required String movieID}) async {

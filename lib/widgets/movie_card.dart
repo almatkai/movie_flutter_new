@@ -2,22 +2,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_new/model/movie_preview.dart';
 import 'package:movie_flutter_new/screens/details_screen.dart';
+import 'package:movie_flutter_new/utils/constants.dart';
+import 'package:movie_flutter_new/utils/navi.dart' as navi;
 import 'package:movie_flutter_new/utils/star_calculator.dart' as starCalculator;
 import 'package:sizer/sizer.dart';
-import 'package:movie_flutter_new/utils/constants.dart';
+
 import 'custom_loading_spin_kit_ring.dart';
-import 'package:movie_flutter_new/utils/navi.dart' as navi;
 
 class MovieCard extends StatelessWidget {
   final MoviePreview moviePreview;
   final Color themeColor;
+  final String language;
   final int? contentLoadedFromPage;
 
-  MovieCard({
-    required this.moviePreview,
-    required this.themeColor,
-    this.contentLoadedFromPage,
-  });
+  MovieCard(
+      {required this.moviePreview,
+      required this.themeColor,
+      this.contentLoadedFromPage,
+      required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +31,9 @@ class MovieCard extends StatelessWidget {
         await navi.newScreen(
             context: context,
             newScreen: () => DetailsScreen(
-                  id: moviePreview.id,
-                  themeColor: themeColor,
-                ));
+                id: moviePreview.id,
+                themeColor: themeColor,
+                language: language));
         if (contentLoadedFromPage != null)
           kHomeScreenKey.currentState!.pageSwitcher(contentLoadedFromPage!);
       },

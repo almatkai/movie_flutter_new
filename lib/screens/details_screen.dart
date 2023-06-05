@@ -1,25 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:movie_flutter_new/model/movie_details.dart';
 import 'package:movie_flutter_new/services/movie.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
+import 'package:movie_flutter_new/utils/file_manager.dart' as file;
+import 'package:movie_flutter_new/utils/star_calculator.dart' as starCalculator;
+import 'package:movie_flutter_new/utils/toast_alert.dart' as alert;
 import 'package:movie_flutter_new/widgets/custom_loading_spin_kit_ring.dart';
 import 'package:sizer/sizer.dart';
-import 'package:movie_flutter_new/utils/star_calculator.dart' as starCalculator;
-import 'package:movie_flutter_new/utils/file_manager.dart' as file;
-import 'package:movie_flutter_new/utils/toast_alert.dart' as alert;
 
 class DetailsScreen extends StatefulWidget {
   final String id;
   final Color themeColor;
-  DetailsScreen({required this.id, required this.themeColor});
+  final String language;
+  DetailsScreen(
+      {required this.id, required this.themeColor, required this.language});
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 
   Future<MovieDetails> getMovieDetails() async {
     MovieModel movieModel = MovieModel();
-    MovieDetails temp = await movieModel.getMovieDetails(movieID: id);
+    MovieDetails temp =
+        await movieModel.getMovieDetails(movieID: id, language: language);
     return temp;
   }
 }
