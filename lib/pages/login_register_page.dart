@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:movie_flutter_new/screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -80,37 +79,6 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
-      User? user = FirebaseAuth.instance.currentUser;
-      var kk = FirebaseFirestore.instance
-          .collection('users')
-          .doc(user!.uid)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          if (documentSnapshot.get('rool') == "Admin") {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-            );
-          } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-            );
-          }
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-        }
-      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -180,6 +148,36 @@ class _LoginPageState extends State<LoginPage> {
         child: Text(isLogin ? "Register instead" : "Login instead"));
   }
 
+  Widget _userOrAdminButton() {
+    return DropdownButton<String>(
+      dropdownColor: Colors.blue,
+      isDense: true,
+      isExpanded: false,
+      iconEnabledColor: Colors.white,
+      focusColor: Colors.white,
+      items: options.map((String dropDownStringItem) {
+        return DropdownMenuItem<String>(
+          value: dropDownStringItem,
+          child: Text(
+            dropDownStringItem,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        );
+      }).toList(),
+      onChanged: (newValueSelected) {
+        setState(() {
+          _currentItemSelected = newValueSelected!;
+          role = newValueSelected;
+        });
+      },
+      value: _currentItemSelected,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,43 +190,17 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            _userOrAdminButton(),
             _entryField('email', _controllerEmail),
             _entryField('password', _controllerPassword),
             _errorMessage(),
             _submitButton(),
             _loginOrRegisterButton(),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               _googleSignInButton(),
               _githubSignInButton(),
               _anonSignInButton()
             ]),
-            DropdownButton<String>(
-              dropdownColor: Colors.blue[900],
-              isDense: true,
-              isExpanded: false,
-              iconEnabledColor: Colors.white,
-              focusColor: Colors.white,
-              items: options.map((String dropDownStringItem) {
-                return DropdownMenuItem<String>(
-                  value: dropDownStringItem,
-                  child: Text(
-                    dropDownStringItem,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: (newValueSelected) {
-                setState(() {
-                  _currentItemSelected = newValueSelected!;
-                  role = newValueSelected;
-                });
-              },
-              value: _currentItemSelected,
-            ),
           ],
         ),
       ),
@@ -236,11 +208,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   postDetailsToFirestore(String email, String rool) async {
-    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var user = FirebaseAuth.instance.currentUser;
     CollectionReference ref = FirebaseFirestore.instance.collection('users');
     ref.doc(user!.uid).set({'email': _controllerEmail.text, 'rool': rool});
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 }

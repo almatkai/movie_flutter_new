@@ -12,25 +12,24 @@ const kThemovieDiscoverdbURL = "https://api.themoviedb.org/3/discover/movie";
 const kThemoviedbSearchURL = "https://api.themoviedb.org/3/search/movie";
 const kThemoviedbImageURL = "https://image.tmdb.org/t/p/w300";
 
-var kHomeScreenButtonFirstText = "Populars";
-var kHomeScreenButtonSecondText = "Coming Soon";
-var kHomeScreenButtonThirdText = "Top Rated";
-var kHomeScreenTitleText = "Watch Now";
-var k404Text = "Movies not found";
-var kFavoriteRemovedText = "Movie removed from Favorites";
-var kFavoriteAddedText = "Movie added to Favorites";
-var kDetailsScreenTitleText = "Overview";
-var kStoryLineTitleText = "Storyline";
-var kSplashScreenTitleText = "loading..";
+var kHomeScreenButtonFirstText = "Populars/Популярные";
+var kHomeScreenButtonSecondText = "Coming Soon/Скоро в экране";
+var kHomeScreenButtonThirdText = "Top Rated/Топ рейтинг";
+var kHomeScreenTitleText = "Watch Now/Смотреть сейчас";
+var k404Text = "Movies not found/Фильмы не нашлись";
+var kFavoriteRemovedText = "Movie removed from Favorites/Убрано из избранных";
+var kFavoriteAddedText = "Movie added to Favorites/Добавлено в избранные";
+var kDetailsScreenTitleText = "Overview/Кратко о фильме";
+var kStoryLineTitleText = "Storyline/История";
+var kSplashScreenTitleText = "loading../загрузка...";
 var kFinderScreenTitleText = "Finder";
-var kFavoriteScreenTitleText = "Favorites";
-var kDrawerTitleFirstText = "THEME";
-var kDrawerTitleSecondText = "ABOUT";
-var kDrawerTitleThirdText = "DEPENDENCIES";
-var kAppliedTheme = "Theme applied";
-var kNotFoundErrorText = "Not found";
+var kFavoriteScreenTitleText = "Favorites/Избранные";
+var kDrawerTitleFirstText = "THEME/Тема";
+var kDrawerTitleSecondText = "ABOUT/Про";
+var kAppliedTheme = "Theme applied/Тема изменено";
+var kNotFoundErrorText = "Not found/Не найдено";
 var kDrawerAboutDescText =
-    "Hi, This is a group project (Almat, Yerdaulet). You see currently my portfoliowork, which is based on the themoviedb API. If you want to see my future developments, follow us on GitHub (almatkai).";
+    "Hi, This is a group project (Almat, Yerdaulet). / Здравстуй, это групповой проект Ердаулета и Алмата.";
 
 const kMainGreenColor = Color(0xFF37A45E);
 const kMainOrangeColor = Color(0xFFE58901);
@@ -85,7 +84,7 @@ final kDrawerDescTextStyle = TextStyle(
 );
 
 final kAppBarTitleTextStyle = TextStyle(
-  fontSize: 28.sp,
+  fontSize: 24.sp,
   fontWeight: FontWeight.bold,
   shadows: kTextShadow,
 );

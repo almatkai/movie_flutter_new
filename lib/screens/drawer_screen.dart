@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_flutter_new/auth.dart';
-import 'package:movie_flutter_new/screens/profile_screen.dart';
 import 'package:movie_flutter_new/utils/constants.dart';
 import 'package:movie_flutter_new/utils/file_manager.dart' as file;
 import 'package:movie_flutter_new/widgets/colored_circle.dart';
@@ -18,7 +17,8 @@ class DrawerScreen extends StatelessWidget {
   }
 
   Widget _signOutButton() {
-    return ElevatedButton(onPressed: signOut, child: const Text("Sign Out"));
+    return ElevatedButton(
+        onPressed: signOut, child: const Text("Sign Out/Выйти"));
   }
 
   @override
@@ -72,7 +72,7 @@ class DrawerScreen extends StatelessWidget {
                 height: 5.h,
               ),
               DrawerItem(
-                title: "Language",
+                title: "Language/Язык",
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -90,13 +90,6 @@ class DrawerScreen extends StatelessWidget {
                       },
                       language: "RUS",
                     ),
-                    LanguageCircle(
-                      onPressed: (language) {
-                        file.saveLanguage(language: "ESP");
-                        languageChanged(language);
-                      },
-                      language: "ESP",
-                    ),
                   ],
                 ),
               ),
@@ -111,11 +104,11 @@ class DrawerScreen extends StatelessWidget {
                 height: 2.h,
               ),
               DrawerItem(
-                  title: "Sign Out",
+                  title: "Sign Out/Выйти",
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
+                        /*ElevatedButton(
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -129,7 +122,7 @@ class DrawerScreen extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                        ),
+                        ),*/
                         _signOutButton()
                       ])),
             ],
